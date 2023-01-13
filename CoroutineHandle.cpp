@@ -35,9 +35,26 @@ struct resumable::promise_type{
     }
 
     auto initial_suspend(){return std::suspend_always();}
-    auto final_suspend(){return std::suspend_always();}
+    auto final_suspend(){return std::suspend_always()}
     void return_void(){}
     void unhandled_exception(){
         std::terminate();
     }
+};
+
+resumable foo()
+{
+    cout<<"a"<<endl;
+    co_await std::suspend_always();
+    cout<<"b"<<endl;
+    co_await std::suspend_always();
+    cout<<"c"<<endl;
+}
+
+int main()
+{
+    resumable res1 = foo();
+    res1.resume();//a
+    res1.resume();//b
+    res1.resume();//c
 }
